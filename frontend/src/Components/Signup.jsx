@@ -1,12 +1,13 @@
 import React from 'react'
-import { Input, VStack } from '@chakra-ui/react'
+import { Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 
 import {
     FormControl,
     FormLabel,
     FormErrorMessage,
-    FormHelperText,
+    Button,
+    FormHelperText
 } from '@chakra-ui/react'
 
 export default function Signup() {
@@ -15,7 +16,17 @@ export default function Signup() {
     const [password, setPassword] = useState('')
     const [confPassword, setConfPassword] = useState('')
     const [pic, setPic] = useState('')
+    const [show, setShow] = useState(false)
+    const [showConfPas, setshowConfPas] = useState(false)
 
+
+    const postDetails = () => {
+
+    }
+
+    const submitHandler = () => {
+
+    }
 
     return (
         <VStack>
@@ -35,18 +46,45 @@ export default function Signup() {
             </FormControl>
             <FormControl isRequired >
                 <FormLabel>Password</FormLabel>
-                <Input
-                    placeholder='Enter your password'
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                <InputGroup>
+                    <Input
+                        type={show ? 'text' : 'password'}
+                        placeholder='Enter your password'
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <InputRightElement>
+                        <Button onClick={() => setShow(!show)} >
+                            {show ? 'hide' : 'show'}
+                        </Button>
+                    </InputRightElement>
+                </InputGroup>
             </FormControl>
             <FormControl isRequired >
                 <FormLabel>Confirm Password</FormLabel>
+                <InputGroup>
+                    <Input
+                        type={showConfPas ? 'text' : 'password'}
+                        placeholder='Enter your password'
+                        onChange={(e) => setConfPassword(e.target.value)}
+                    />
+                    <InputRightElement>
+                        <Button onClick={() => setshowConfPas(!showConfPas)} >
+                            {showConfPas ? 'hide' : 'show'}
+                        </Button>
+                    </InputRightElement>
+                </InputGroup>
+            </FormControl>
+
+            <FormControl id='pic' >
+                <FormLabel>Upload your pic</FormLabel>
                 <Input
-                    placeholder='Enter your conform password'
-                    onChange={(e) => confPassword(e.target.value)}
+                    type='file'
+                    accept='image/*'
+                    onChange={(e) => postDetails(e.target.files[0])}
                 />
             </FormControl>
+
+            <Button w='100%' onClick={submitHandler} >Sign up</Button>
 
         </VStack>
     )
