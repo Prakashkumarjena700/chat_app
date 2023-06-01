@@ -2,6 +2,8 @@ const express = require('express')
 const dotenv = require('dotenv')
 const { chats } = require('./data/data')
 var cors = require('cors')
+const { connection } = require('mongoose')
+const { usersRoute } = require('./routes/user.routes')
 
 const app = express()
 dotenv.config()
@@ -21,8 +23,17 @@ app.get('/api/chat/:id', (req, res) => {
     res.send(singleChat)
 })
 
+
+app.use('/users', usersRoute)
+
 const PORT = process.env.port || 4000
 
-app.listen(5000, () => {
+app.listen(5000, async () => {
+    try {
+        await connection
+        console.log('Connected to db')
+    } catch (err) {
+        console.log('Not connected to db')
+    }
     console.log(`server is running at port ${PORT}`)
 })
