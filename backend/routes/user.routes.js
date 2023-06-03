@@ -18,9 +18,6 @@ usersRoute.post('/', async (req, res) => {
 
         res.send('user register')
 
-
-
-
     } catch (err) {
         console.log(err)
         res.send('err')
