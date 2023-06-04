@@ -1,13 +1,13 @@
 .heading {
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    border: 1px solid #cafaa6;
+    /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+    /* border: 1px solid #cafaa6; */
     padding: 10px;
     font-size: larger;
     font-weight: 500;
     width: 40%;
     margin: auto;
     text-align: center;
-    background-color: rgb(46, 204, 31);
+    /* background-color: rgb(46, 204, 31); */
     border-radius: 30px;
 }
 
