@@ -8,6 +8,7 @@ export default function AllRoutes() {
     return (
         <Routes>
             <Route path='/' Component={Home} ></Route>
+
             <Route path='/chats' Component={ChatsPage} ></Route>
         </Routes>
     )
