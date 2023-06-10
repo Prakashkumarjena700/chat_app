@@ -2,7 +2,7 @@ const express = require('express')
 const dotenv = require('dotenv')
 const { chats } = require('./data/data')
 var cors = require('cors')
-const { connection } = require('mongoose')
+const { connection } = require('./config/db')
 const { usersRoute } = require('./routes/user.routes')
 
 const app = express()

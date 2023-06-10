@@ -1,5 +1,7 @@
 const express = require('express');
 const { User } = require('../models/user.model');
+const { generatedToken } = require('../config/generateToken');
+
 
 const usersRoute = express.Router()
 
@@ -8,15 +10,22 @@ usersRoute.post('/', async (req, res) => {
         const { name, email, password, pic } = req.body
 
         if (!name || !email || !password) {
-            res.status(400);
             res.send("Please Enter all the Feilds")
         }
 
         const newuser = await new User(req.body)
         newuser.save()
 
+        const user = await User.find({ email })
 
-        res.send('user register')
+        let token = generatedToken(user[0]._id)
+
+        let respons = {
+            user: user[0],
+            token
+        }
+
+        res.send(respons)
 
     } catch (err) {
         console.log(err)
@@ -26,7 +35,22 @@ usersRoute.post('/', async (req, res) => {
 
 usersRoute.post('/login', async (req, res) => {
     try {
-        res.send('here we will login user')
+        const { email, password } = req.body
+
+        const user = await User.find({ email })
+
+        let token = generatedToken(user._id)
+
+        if (user.length > 0) {
+            if (user[0].email === email && password === user[0].password) {
+                res.send({ user, token })
+            } else {
+                res.send('Wrong Crediential')
+            }
+        } else {
+            res.send('Wrong Crediential')
+        }
+
     } catch (err) {
         res.send(err)
         console.log('err')
