@@ -1,6 +1,9 @@
 import React from 'react'
 import { Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useToast } from '@chakra-ui/react'
+import { useNavigate } from 'react-router-dom'
+
 
 import {
     FormControl,
@@ -20,11 +23,90 @@ export default function Signup() {
     const [showConfPas, setshowConfPas] = useState(false)
 
 
-    const postDetails = () => {
+    const navigate = useNavigate()
+    const toast = useToast()
 
-    }
+    const [loading, setLoading] = useState(false)
 
-    const submitHandler = () => {
+
+    const submitHandler = async () => {
+        setLoading(true)
+        const formData = new FormData();
+        formData.append('file', pic);
+        formData.append('upload_preset', 'ngw7fl2u');
+
+        const response = await fetch(
+            'https://api.cloudinary.com/v1_1/dkwrlyeva/image/upload',
+            {
+                method: 'POST',
+                body: formData,
+            }
+        );
+
+        const data = await response.json();
+        console.log(data.secure_url)
+
+        if (!name || !email || !password || !confPassword) {
+            toast({
+                title: 'Please fill all the details.',
+                // description: "We've created your account for you.",
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+            })
+            return;
+        }
+
+        if (password !== confPassword) {
+            toast({
+                title: 'Please match password and confrm password.',
+                // description: "We've created your account for you.",
+                status: 'warning',
+                duration: 5000,
+                isClosable: true,
+            })
+            return;
+        }
+
+        let obj = {
+            name,
+            email,
+            password,
+            pic: data.secure_url
+        }
+
+        await fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        }).then(res => res.json())
+            .then(res => {
+                setLoading(false)
+                toast({
+                    title: 'Register sucessful.',
+                    description: "User has been rigister.",
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                })
+                console.log(res)
+                localStorage.setItem('userInfo', JSON.stringify(res))
+                navigate('/chats')
+            })
+            .catch(err => {
+                setLoading(false)
+                console.log(err)
+                toast({
+                    title: 'Error occers.',
+                    description: "Error ",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            })
+
 
     }
 
@@ -80,11 +162,11 @@ export default function Signup() {
                 <Input
                     type='file'
                     accept='image/*'
-                    onChange={(e) => postDetails(e.target.files[0])}
+                    onChange={(e) => setPic(e.target.files[0])}
                 />
             </FormControl>
 
-            <Button w='100%' onClick={submitHandler} >Sign up</Button>
+            <Button w='100%' isLoading={loading} onClick={submitHandler} >Sign up</Button>
 
         </VStack>
     )

@@ -9,23 +9,30 @@ usersRoute.post('/', async (req, res) => {
     try {
         const { name, email, password, pic } = req.body
 
-        if (!name || !email || !password) {
-            res.send("Please Enter all the Feilds")
+        let exitUser = await User.find({ email })
+
+        if (exitUser.length > 0) {
+            res.send('Already have an account please login')
+        } else {
+
+            if (!name || !email || !password) {
+                res.send("Please Enter all the Feilds")
+            }
+
+            const newuser = await new User(req.body)
+            newuser.save()
+
+            const user = await User.find({ email })
+
+            let token = generatedToken(user[0]._id)
+
+            let respons = {
+                user: user[0],
+                token
+            }
+
+            res.send(respons)
         }
-
-        const newuser = await new User(req.body)
-        newuser.save()
-
-        const user = await User.find({ email })
-
-        let token = generatedToken(user[0]._id)
-
-        let respons = {
-            user: user[0],
-            token
-        }
-
-        res.send(respons)
 
     } catch (err) {
         console.log(err)
