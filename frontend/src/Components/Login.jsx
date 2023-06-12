@@ -17,7 +17,8 @@ export default function Login() {
 
 
   const submitHandler = () => {
-
+    console.log(email, password)
+    console.log('Hello')
   }
 
   return (
