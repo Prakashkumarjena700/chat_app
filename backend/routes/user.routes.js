@@ -64,6 +64,18 @@ usersRoute.post('/login', async (req, res) => {
     }
 })
 
+usersRoute.get('/', async (req, res) => {
+    try {
+        const keyword = req.query.search
+
+        console.log(keyword)
+        res.send(keyword)
+
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 module.exports = {
     usersRoute
 }
