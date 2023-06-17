@@ -4,6 +4,7 @@ const { chats } = require('./data/data')
 var cors = require('cors')
 const { connection } = require('./config/db')
 const { usersRoute } = require('./routes/user.routes')
+const { auth } = require('./middleware/auth.middleware')
 
 const app = express()
 app.use(express.json())
@@ -24,6 +25,7 @@ app.get('/api/chat/:id', (req, res) => {
     res.send(singleChat)
 })
 
+app.use(auth)
 
 app.use('/users', usersRoute)
 
